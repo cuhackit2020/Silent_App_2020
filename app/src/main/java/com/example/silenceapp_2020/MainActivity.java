@@ -22,18 +22,15 @@ import android.widget.TextView;
  *
  */
 
-
-
 public class MainActivity extends AppCompatActivity {
+    //Necessary for changing activity, context
     private Context mContext;
     private Activity mActivity;
 
-    private LinearLayout mRootLayout;
+    //Temporary way to call changeInterruptionFilter; change from buttons to
+    //enter/exit boundaries
     private Button mBtnFilterNone;
-    private Button mBtnFilterPriority;
-    private Button mBtnFilterAlarms;
     private Button mBtnFilterAll;
-    private TextView mTVStats;
 
     private NotificationManager mNotificationManager;
 
@@ -47,11 +44,8 @@ public class MainActivity extends AppCompatActivity {
         mActivity = MainActivity.this;
 
         // Get the widget reference from xml layout
-        mRootLayout = findViewById(R.id.root_layout);
-        mTVStats = findViewById(R.id.tv_stats);
+        //mRootLayout = findViewById(R.id.root_layout);
         mBtnFilterAll = findViewById(R.id.btn_all);
-        mBtnFilterPriority = findViewById(R.id.btn_priority);
-        mBtnFilterAlarms = findViewById(R.id.btn_alarms);
         mBtnFilterNone = findViewById(R.id.btn_none);
 
         /*
@@ -67,15 +61,7 @@ public class MainActivity extends AppCompatActivity {
         mBtnFilterNone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*
-                    int INTERRUPTION_FILTER_NONE
-                        Interruption filter constant - No interruptions filter - all notifications
-                        are suppressed and all audio streams (except those used for phone calls)
-                        and vibrations are muted.
-                */
                 changeInterruptionFiler(NotificationManager.INTERRUPTION_FILTER_NONE);
-                mRootLayout.setBackgroundColor(Color.RED);
-                mTVStats.setText("Now on do not disturb mode.");
             }
         });
 
@@ -83,53 +69,21 @@ public class MainActivity extends AppCompatActivity {
         mBtnFilterAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*
-                    int INTERRUPTION_FILTER_ALL
-                        Interruption filter constant - Normal interruption
-                        filter - no notifications are suppressed.
-                */
                 changeInterruptionFiler(NotificationManager.INTERRUPTION_FILTER_ALL);
-                mRootLayout.setBackgroundColor(Color.GREEN);
-                mTVStats.setText("Now off do not disturb mode.");
-            }
-        });
-
-        // Allow priority only notifications
-        // Partially turn on do not disturb mode
-        mBtnFilterPriority.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                /*
-                    int INTERRUPTION_FILTER_PRIORITY
-                        Interruption filter constant - Priority interruption filter - all notifications
-                        are suppressed except those that match the priority criteria. Some audio
-                        streams are muted.
-                */
-                changeInterruptionFiler(NotificationManager.INTERRUPTION_FILTER_PRIORITY);
-                mRootLayout.setBackgroundColor(Color.YELLOW);
-                mTVStats.setText("Now on do not disturb mode for priority only.");
-            }
-        });
-
-        // Only allow alarms notification
-        // Partially turn on do not disturb mode
-        mBtnFilterAlarms.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                /*
-                    int INTERRUPTION_FILTER_ALARMS
-                        Interruption filter constant - Alarms only interruption filter - all
-                        notifications except those of category CATEGORY_ALARM are suppressed.
-                        Some audio streams are muted.
-                */
-                changeInterruptionFiler(NotificationManager.INTERRUPTION_FILTER_ALARMS);
-                mRootLayout.setBackgroundColor(Color.MAGENTA);
-                mTVStats.setText("Now on do not disturb mode for alarms only.");
             }
         });
     }
 
     protected void changeInterruptionFiler(int interruptionFilter){
+        /**
+         * This is the method responsible for initiating the shift from DnD to silent, etc.
+         * To go to COMPLETELY SILENT (when ENTERING an area) call:
+         * changeInterruptionFiler(NotificationManager.INTERRUPTION_FILTER_NONE);
+         * To go revert this (when LEAVING an area) call:
+         * changeInterruptionFiler(NotificationManager.INTERRUPTION_FILTER_ALL);
+         *
+         * Details of possible args are documented in each conditional
+         */
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){ // If api level minimum 23
             /*
                 boolean isNotificationPolicyAccessGranted ()

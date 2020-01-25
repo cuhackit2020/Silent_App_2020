@@ -10,13 +10,7 @@
     android:orientation="vertical"
     android:background="#d0e9ec"
     >
-    <TextView
-        android:id="@+id/tv_stats"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="22sp"
-        android:padding="10dp"
-        />
+
     <Button
         android:id="@+id/btn_none"
         android:layout_width="wrap_content"
@@ -29,16 +23,5 @@
         android:layout_height="wrap_content"
         android:text="Set Interruption Filter All (OFF DoD)"
         />
-    <Button
-        android:id="@+id/btn_priority"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Set Interruption Filter Priority"
-        />
-    <Button
-        android:id="@+id/btn_alarms"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Set Interruption Filter Alarms"
-        />
+
 </LinearLayout>
